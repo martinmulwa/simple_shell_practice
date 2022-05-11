@@ -9,7 +9,7 @@ char *prompt(void);
 char *strip_newline(char *str);
 void sig_handler(int sig);
 
-char *input;
+char *buf;
 
 /**
  * main - implements a super simple shell
@@ -18,11 +18,13 @@ char *input;
  */
 int main(void)
 {
+	char *input;
 	int status, child_pid;
 	char *argv[2];
 
 	argv[1] = NULL;
 
+	/* handle SIGINT */
 	if (signal(SIGINT, sig_handler) == SIG_ERR)
 		exit(98);
 
@@ -68,7 +70,6 @@ int main(void)
 char *prompt(void)
 {
 	size_t size = 10;
-	char *buf;
 
 	/* allocate space for buf */
 	buf = malloc(sizeof(char) * size);
@@ -78,7 +79,7 @@ char *prompt(void)
 	printf("#cisfun$ ");
 
 	/* get input */
-	if(getline(&buf, &size, stdin) == -1)
+	if (getline(&buf, &size, stdin) == -1)
 	{
 		free(buf);
 		return (NULL);
@@ -119,6 +120,7 @@ char *strip_newline(char *str)
  */
 void sig_handler(int sig)
 {
-	free(input);
-	exit(98);
+	free(buf);
+	write(STDOUT_FILENO, "\n", 2);
+	exit(0);
 }
