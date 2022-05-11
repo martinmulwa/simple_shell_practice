@@ -18,14 +18,17 @@ int main(void)
 		child_pid = fork();
 		if (child_pid == 0)
 		{
-			printf("ppid: %u\n", getppid());
 			if (execve(argv[0], argv, NULL) == -1)
 				perror("Error!\n");
 		}
+		else if (child_pid == -1)
+		{
+			perror("Error:");
+        	return (1);
+		}
+
 		wait(&status);
 	}
-
-	printf("pid: %u\n", getpid());
 
 	return (0);
 }
