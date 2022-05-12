@@ -33,7 +33,10 @@ int main(void)
 		/* get input */
 		input = prompt();
 		if (input == NULL)
-			return (1);
+		{
+			write(STDOUT_FILENO, "\n", 2);
+			exit(0);
+		}
 
 		argv[0] = input;
 
@@ -121,6 +124,7 @@ char *strip_newline(char *str)
 void sig_handler(int sig)
 {
 	free(buf);
+	(void)sig;
 	write(STDOUT_FILENO, "\n", 2);
 	exit(0);
 }

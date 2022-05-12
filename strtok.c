@@ -12,7 +12,7 @@ int main(void)
 	char str[80] = "hello world goodbye 510";
 	char *delim = " ";
 	char *res;
-	char *words[2];
+	char *words[5];
 
 	/* get first token */
 	words[i++] = strtok(str, delim);
