@@ -16,6 +16,7 @@ unsigned int _strlen(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *_strdup(const char *str);
 char *_strtok(char *str, const char *delim);
+int is_in_str(const char *str, char c);
 
 /********** List Functions ************/
 
@@ -56,5 +57,12 @@ void print_env(void);
 char *_getenv(const char *name);
 int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(const char *name);
+
+/********** which Functions ************/
+char *get_full_path(char *filename, list_t *path_list);
+char *create_path(char *dir, char *filename);
+int is_command(char *filename);
+void _which(char *filename, list_t *path_list);
+
 
 #endif

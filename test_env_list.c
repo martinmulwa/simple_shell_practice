@@ -17,10 +17,10 @@ list_t *env_list = NULL;
  */
 int main(void)
 {
-	/*char *name = "HELLO";
-	char *value = "goodbye";*/
-	char str[80] = "   - - - - - hello    world             goodbye       510-";
-	list_t *str_list;
+	char *name = "HELLO";
+	char *value = "goodbye";
+	/*char str[80] = "   - - - - - hello    world         goodbye       510-";
+	list_t *str_list;*/
 	/*int index;*/
 
 	/* create env_list */
@@ -32,25 +32,28 @@ int main(void)
 	/* update node at index */
 	/*test_update_value(index, value);*/
 
+	/*print_env();
+	print_sep();*/
+
 	/* setenv */
-	/*test_setenv(name, value, 0);
+	/*test_setenv(name, value, 1);
 	test_setenv("HI", "world", 0);
 	test_setenv("!", "/bin/", 0);
+	test_setenv("=", "hello", 1);*/
 
 	print_env();
-	print_sep();
 
-	test_unsetenv("SHELL");
+	/*test_unsetenv("SHELL");
 	test_unsetenv("LS_COLORS");
 	test_unsetenv("!");*/
 
-	printf("%s\n", str);
-
 	/* test split_string */
+	/*printf("%s\n", str);
 	str_list = split_string(str, " ");
 	print_list(str_list);
 
-	free_list(&str_list);
+	free_list(&str_list);*/
+
 	free_list(&env_list);
 	return (0);
 }

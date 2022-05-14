@@ -77,7 +77,7 @@ int _setenv(const char *name, const char *value, int overwrite)
 {
 	int index;
 
-	if (name == NULL || value == NULL) /* check if name contains = */
+	if (name == NULL || value == NULL || is_in_str(name, '='))
 		return (-1);
 
 	/* find index of node with name */
@@ -109,7 +109,7 @@ int _unsetenv(const char *name)
 {
 	int index;
 
-	if (name == NULL) /* check if name contains = */
+	if (name == NULL)
 		return (-1);
 
 	/* find index of node to delete */

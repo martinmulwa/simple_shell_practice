@@ -122,7 +122,7 @@ char *_strtok(char *str, const char *delim)
 
 	c = delim[0];
 
-	while(*current == c) /* ignore separators at beginning */
+	while (*current == c) /* ignore separators at beginning */
 	{
 		start++;
 		current++;
@@ -141,8 +141,31 @@ char *_strtok(char *str, const char *delim)
 		current++;
 	}
 
-	while(*current && *current == c) /* ignore separators at end */
+	while (*current && *current == c) /* ignore separators at end */
 		current++;
 
 	return (start);
+}
+
+/**
+ * is_in_str - checks whether given character is in a given string
+ * @str: string
+ * @c: character
+ *
+ * Return: 1 if c is in str. 0 Otherwise
+ */
+int is_in_str(const char *str, char c)
+{
+	if (str == NULL)
+		return (0);
+
+	while (*str)
+	{
+		if (*str == c)
+			return (1);
+
+		str++;
+	}
+
+	return (0);
 }
