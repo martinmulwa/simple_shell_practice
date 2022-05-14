@@ -47,11 +47,10 @@ int main(void)
 	printf("%s\n", str);
 
 	/* test split_string */
-	str_list = split_string(str, "- ");
+	str_list = split_string(str, " ");
 	print_list(str_list);
 
-	printf("%s\n", str);
-
+	free_list(&str_list);
 	free_list(&env_list);
 	return (0);
 }

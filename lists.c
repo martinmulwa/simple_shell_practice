@@ -12,7 +12,7 @@ list_t *add_node_end(list_t **head, const char *name, const char *value)
 {
 	list_t *trav, *new;
 
-	if (head == NULL)
+	if (head == NULL || name == NULL || value == NULL)
 		return (NULL);
 
 	trav = *head;
@@ -89,12 +89,15 @@ list_t *create_node(const char *name, const char *value)
 {
 	list_t *new;
 
+	if (name == NULL || value == NULL)
+		return (NULL);
+
 	new = malloc(sizeof(list_t));
 	if (new == NULL)
 		return (NULL);
 
-	new->name = (name == NULL) ? _strdup("(nil)") : _strdup(name);
-	new->value = (value == NULL) ? _strdup("(nil)") : _strdup(value);
+	new->name = _strdup(name);
+	new->value = _strdup(value);
 	new->next = NULL;
 
 	return (new);
@@ -321,11 +324,11 @@ list_t *split_string(char *str, char *delim)
 		return (NULL);
 
 	/* get first string */
-	add_node_end(&strings, strtok(str, delim), NULL);
+	add_node_end(&strings, _strtok(str, delim), "");
 
 	/* get all other strings */
-	while ((next_str = strtok(NULL, delim)))
-		add_node_end(&strings, next_str, NULL);
+	while ((next_str = _strtok(NULL, delim)))
+		add_node_end(&strings, next_str, "");
 
 	return (strings);
 }

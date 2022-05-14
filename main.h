@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>           /* Definition of AT_* constants */
 #include <sys/stat.h>
@@ -16,6 +15,7 @@ char *_strcpy(char *dest, const char *src);
 unsigned int _strlen(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *_strdup(const char *str);
+char *_strtok(char *str, const char *delim);
 
 /********** List Functions ************/
 

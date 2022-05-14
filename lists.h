@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 /**
  * struct list_s - singly linked list of values
@@ -38,5 +37,6 @@ char *_strcpy(char *dest, const char *src);
 unsigned int _strlen(const char *str);
 int _strcmp(const char *s1, const char *s2);
 char *_strdup(const char *str);
+char *_strtok(char *str, const char *delim);
 
 #endif

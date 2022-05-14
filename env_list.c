@@ -16,8 +16,8 @@ list_t *create_env(char **env)
 
 	for (i = 0; env[i]; i++)
 	{
-		name = strtok(env[i], "=");
-		value = strtok(NULL, "\n");
+		name = _strtok(env[i], "=");
+		value = _strtok(NULL, "\n");
 
 		if (add_node_end(&env_list, name, value) == NULL)
 			return (NULL);
