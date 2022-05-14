@@ -1,13 +1,14 @@
 #include "lists.h"
 
 /**
- * add_node_end - adds a new node at the end of a list_t list
+ * add_node_end - adds a new node at the end of a list_s list
  * @head: pointer to the address of the first node
- * @str: the value of the str field of the new node
+ * @name: the value of the name field of the new node
+ * @value: the value of the value field of the new node
  *
  * Return: head of the new list. Otherwise NULL
  */
-list_t *add_node_end(list_t **head, const char *str)
+list_t *add_node_end(list_t **head, const char *name, const char *value)
 {
 	list_t *trav, *new;
 
@@ -17,13 +18,9 @@ list_t *add_node_end(list_t **head, const char *str)
 	trav = *head;
 
 	/* create the new node */
-	new = malloc(sizeof(list_t));
+	new = create_node(name, value);
 	if (new == NULL)
 		return (NULL);
-
-	new->str = (str == NULL) ? _strdup("(nil)") : _strdup(str);
-	new->len = (str == NULL) ? 0 : _strlen(str);
-	new->next = NULL;
 
 	/* if the list has no elements */
 	if (trav == NULL)
@@ -63,7 +60,6 @@ size_t list_len(const list_t *h)
 /**
  * print_list - prints all the elements of a list_t list in a given format
  * @h: pointer to a list_t
- * If str is NULL, print [0] (nil)
  *
  * Return: number of nodes in given list_t
  */
@@ -73,14 +69,7 @@ size_t print_list(const list_t *h)
 
 	while (h != NULL)
 	{
-		if (h->str == NULL)
-		{
-			printf("[0] (nil)\n");
-		}
-		else
-		{
-			printf("[%u] %s\n", h->len, h->str);
-		}
+		printf("%s\n", h->name);
 
 		count++;
 		h = h->next;
@@ -90,43 +79,253 @@ size_t print_list(const list_t *h)
 }
 
 /**
- * free_list - frees a list_t list
- * @head: pointer to list_t
+ * create_node - creates a new list_t node
+ * @name: value of the name field
+ * @value: value of the value field
+ *
+ * Return: address of new node. Otherwise NULL
  */
-void free_list(list_t *head)
+list_t *create_node(const char *name, const char *value)
 {
-	if (head == NULL)
+	list_t *new;
+
+	new = malloc(sizeof(list_t));
+	if (new == NULL)
+		return (NULL);
+
+	new->name = (name == NULL) ? _strdup("(nil)") : _strdup(name);
+	new->value = (value == NULL) ? _strdup("(nil)") : _strdup(value);
+	new->next = NULL;
+
+	return (new);
+}
+/**
+ * free_node - frees a list_t node
+ * @h: pointer to list_t node
+ */
+void free_node(list_t *h)
+{
+	if (h == NULL)
 		return;
 
-	free_list(head->next);
-	free(head->str);
-	free(head);
+	if (h->name)
+		free(h->name);
+
+	if (h->value)
+		free(h->value);
+
+	free(h);
+	h = NULL;
 }
 
 /**
- * list_to_array - converts a given linked list into an array of strings
- * @head: head of given list
+ * free_list - frees a list_t list
+ * @head: pointer to list_t head
+ */
+void free_list(list_t **head)
+{
+	list_t *current;
+
+	if (head == NULL)
+		return;
+
+	while (*head != NULL)
+	{
+		current = *head;
+		*head = (*head)->next;
+		free_node(current);
+	}
+
+}
+
+/**
+ * list_to_array - converts a given list of strings into an array of strings
+ * @h: head of given list
  *
  * Return: an array of strings. Otherwise NULL
  */
-char **list_to_array(list_t *head)
+char **list_to_array(const list_t *h)
 {
 	char **array;
 	unsigned int i, length;
 
-	if (head == NULL)
+	if (h == NULL)
 		return (NULL);
 
 	/* allocate space for array */
-	length = list_len(head);
+	length = list_len(h);
 	array = malloc(sizeof(char *) * (length + 1));
 	if (array == NULL)
 		return (NULL);
 
-	for (i = 0; i < length && head; i++, head = head->next)
-		array[i] = _strdup(head->str);
+	for (i = 0; i < length && h; i++, h = h->next)
+		array[i] = _strdup(h->name);
 
 	array[length] = NULL;
-	
+
 	return (array);
+}
+
+/**
+ * delete_node_name - deletes the node at given name of a linked list
+ * @head: pointer to the pointer of the 1st node in the list
+ * @name: the name value of the node that should be deleted
+ *
+ * Return: 1 is successful. Otherwise 0
+ */
+int delete_node_name(list_t **head, const char *name)
+{
+	list_t *current, *del;
+
+	/* if list does not exist or list is empty or name is NULL */
+	if (head == NULL || *head == NULL || name == NULL)
+		return (0);
+
+	current = *head;
+
+	/* if you are deleting the 1st node */
+	if (_strcmp((*head)->name, name) == 0)
+	{
+		*head = (*head)->next;
+		free_node(current);
+		return (1);
+	}
+
+	/* go to the node just before the node we are supposed to delete */
+	while (current->next && _strcmp(current->next->name, name))
+		current = current->next;
+
+	/* delete the node */
+	if (current->next)
+	{
+		del = current->next;
+		current->next = current->next->next;
+		free_node(del);
+	}
+
+	return (1);
+}
+
+/**
+ * delete_node_index - deletes the node at given name of a linked list
+ * @head: pointer to the pointer of the 1st node in the list
+ * @index: the index of the node that should be deleted
+ *
+ * Return: 0 is successful. Otherwise -1
+ */
+int delete_node_index(list_t **head, int index)
+{
+	list_t *current, *del;
+	int i;
+
+	/* if list does not exist or list is empty */
+	if (head == NULL || *head == NULL)
+		return (-1);
+
+	current = *head;
+
+	/* if you are deleting the 1st node */
+	if (index == 0)
+	{
+		*head = (*head)->next;
+		free_node(current);
+		return (0);
+	}
+
+	/* go to the node just before the node we are supposed to delete */
+	for (i = 0; (i < index - 1) && current->next; i++)
+		current = current->next;
+
+	/* delete the node */
+	if (current->next && i == index - 1)
+	{
+		del = current->next;
+		current->next = current->next->next;
+		free_node(del);
+	}
+
+	return (0);
+}
+
+/**
+ * find_name - finds the index of a node with the given name in a list_t
+ * @h: head of list_t
+ * @name: name of node
+ *
+ * Return: index of node if found. Otherwise -1
+ */
+int find_name(list_t *h, const char *name)
+{
+	list_t *trav = h;
+	int index = 0;
+
+	if (h == NULL || name == NULL)
+		return (-1);
+
+	/* find matching node */
+	while (trav && (_strcmp(trav->name, name)))
+	{
+		index++;
+		trav = trav->next;
+	}
+
+	return (trav ? index : -1);
+}
+
+/**
+ * update_value - updates value field list_t node at given index
+ * @h: head of list_t
+ * @index: index of node to update
+ * @value: new value
+ *
+ * Return: 0 success. -1 Otherwise
+ */
+int update_value(list_t *h, int index, const char *value)
+{
+	list_t *trav = h;
+
+	if (h == NULL || index < 0 || value == NULL)
+		return (-1);
+
+	/* find node to update */
+	while (index && trav)
+	{
+		index--;
+		trav = trav->next;
+	}
+
+	/* update node */
+	if (trav)
+	{
+		free(trav->value);
+		trav->value = _strdup(value);
+		return (0);
+	}
+
+	return (-1);
+}
+
+/**
+ * split_string - splits a given string using a given delimiter
+ * @str: string to split
+ * @delim: delimiter
+ *
+ * Return: list of strings
+ */
+list_t *split_string(char *str, char *delim)
+{
+	char *next_str;
+	list_t *strings = NULL;
+
+	if (str == NULL || delim == NULL)
+		return (NULL);
+
+	/* get first string */
+	add_node_end(&strings, strtok(str, delim), NULL);
+
+	/* get all other strings */
+	while ((next_str = strtok(NULL, delim)))
+		add_node_end(&strings, next_str, NULL);
+
+	return (strings);
 }

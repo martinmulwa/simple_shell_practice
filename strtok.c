@@ -18,7 +18,7 @@ int main(void)
 	words[i++] = strtok(str, delim);
 
 	/* get all other tokens */
-	while((res = strtok(NULL, delim)))
+	while ((res = strtok(NULL, delim)))
 		words[i++] = res;
 
 	/* print all tokens */

@@ -22,7 +22,7 @@ int main(int ac, char **av, char **env)
 	}
 
 	/* create environ linked list */
-	
+
 	/* get PATH */
 	for (i = 0; env[i] != NULL; i++)
 	{
@@ -73,31 +73,6 @@ char *get_path(char *str, const char *var)
 		path = strtok(NULL, "\n");
 
 	return (path);
-}
-
-/**
- * split_string - splits a given string using a given delimiter
- * @str: string to split
- * @delim: delimiter
- *
- * Return: list of strings
- */
-list_t *split_string(char *str, char *delim)
-{
-	char *next_str;
-	list_t *strings = NULL;
-
-	if (str == NULL || delim == NULL)
-		return (NULL);
-
-	/* get first string */
-	add_node_end(&strings, strtok(str, delim));
-
-	/* get all other strings */
-	while ((next_str = strtok(NULL, delim)))
-		add_node_end(&strings, next_str);
-
-	return (strings);
 }
 
 /**
